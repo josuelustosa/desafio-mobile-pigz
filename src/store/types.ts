@@ -49,3 +49,22 @@ export interface TablesApiResponse {
 }
 
 export type RequestStatus = 'idle' | 'loading' | 'succeeded' | 'failed';
+
+export interface TablesState {
+  items: Table[];
+  pagination: PaginationMeta;
+  status: RequestStatus;
+  error: string | null;
+}
+
+export interface UiState {
+  activeFilter: FilterType;
+  isNewOrderModalOpen: boolean;
+  selectedTableId: string | null;
+}
+
+export interface SearchState {
+  query: string;
+  debouncedQuery: string;
+  resultIds: string[];
+}
