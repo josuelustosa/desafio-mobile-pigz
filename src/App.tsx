@@ -5,34 +5,89 @@
  * @format
  */
 
-import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
+import React from 'react';
 import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+  useColorScheme,
+} from 'react-native';
 
-function App() {
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+
+import { lightColors, darkColors } from './theme/colors';
+import { spacing, radii } from './theme/spacing';
+import { textStyles } from './theme/typography';
+
+function AppContent() {
   const isDarkMode = useColorScheme() === 'dark';
+  const colors = isDarkMode ? darkColors : lightColors;
 
   return (
-    <SafeAreaProvider>
+    <SafeAreaView
+      style={[
+        styles.container,
+        {
+          backgroundColor: colors.background.primary,
+        },
+      ]}
+      edges={['top']}
+    >
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <AppContent />
-    </SafeAreaProvider>
+
+      <View style={styles.content}>
+        <Text style={[textStyles.headingLg, { color: colors.text.primary }]}>
+          Hello,
+        </Text>
+
+        <Text
+          style={[
+            textStyles.headingMd,
+            {
+              color: colors.brand.default,
+              marginTop: spacing.xs,
+            },
+          ]}
+        >
+          Fulano de Tal
+        </Text>
+
+        <Text
+          style={[
+            textStyles.bodyMd,
+            {
+              color: colors.text.secondary,
+              marginTop: spacing.lg,
+            },
+          ]}
+        >
+          Seja bem-vindo ao aplicativo.
+        </Text>
+
+        <View style={styles.skeletonContainer}>
+          {[1, 2, 3].map(item => (
+            <View
+              key={item}
+              style={[
+                styles.skeletonButton,
+                {
+                  backgroundColor: colors.background.tertiary,
+                },
+              ]}
+            />
+          ))}
+        </View>
+      </View>
+    </SafeAreaView>
   );
 }
 
-function AppContent() {
-  const safeAreaInsets = useSafeAreaInsets();
-
+export default function App() {
   return (
-    <View style={styles.container}>
-      <NewAppScreen
-        templateFileName="App.tsx"
-        safeAreaInsets={safeAreaInsets}
-      />
-    </View>
+    <SafeAreaProvider>
+      <AppContent />
+    </SafeAreaProvider>
   );
 }
 
@@ -40,6 +95,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-});
 
-export default App;
+  content: {
+    flex: 1,
+    paddingHorizontal: spacing.xl,
+    paddingTop: spacing.xxxl,
+  },
+
+  skeletonContainer: {
+    marginTop: spacing.xxxl,
+    gap: spacing.md,
+  },
+
+  skeletonButton: {
+    height: 56,
+    borderRadius: radii.md,
+  },
+});
