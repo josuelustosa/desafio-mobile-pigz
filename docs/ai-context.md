@@ -23,7 +23,7 @@ A ordem planejada para evolução do projeto é:
 1. Setup do projeto e dependências - concluído.
 2. Theme e design tokens - concluído.
 3. Redux Store e AsyncStorage - concluído.
-4. API service com Axios - próxima etapa.
+4. API service com Axios - concluído.
 5. `tablesSlice` conectado com paginação real.
 6. `TableCard`, `FilterTabs` e `SearchBar`.
 7. `TableMapScreen` com scroll infinito e refs.
@@ -77,6 +77,22 @@ A decisão foi manter a store preparada para receber dados reais, mas ainda com 
 
 A busca foi criada como `searchSlice` separado porque a arquitetura anexada previa esse slice e ele tende a crescer quando `SearchBar` e debounce forem implementados.
 
+## Estado atual da camada de serviços
+
+A camada de serviços foi implementada em `src/services/` com Axios e mock local tipado, para atender o requisito de API REST mesmo sem backend disponível neste momento.
+
+Arquivos principais:
+
+- `src/services/api.config.ts`: instância Axios central com timeout, headers padrão e interceptors.
+- `src/services/tables.service.ts`: método `getTables(params)` para buscar mesas com `page`, `perPage`, `filter` e `query`.
+- `src/services/mocks/tables.mock.ts`: gerador pseudoaleatório com seed fixa para até 500 mesas, incluindo paginação e filtros em memória.
+- `src/services/index.ts`: barrel export do módulo de serviços.
+
+Decisão importante:
+
+- o mock é gerado uma única vez por sessão de execução para manter consistência entre chamadas paginadas;
+- a API local responde `GET /tables` via adapter do Axios, facilitando a futura troca para backend real sem alterar consumidores do serviço.
+
 ## Dependências adicionadas
 
 Dependências de runtime:
@@ -85,6 +101,7 @@ Dependências de runtime:
 - `react-redux`;
 - `redux-persist`;
 - `@react-native-async-storage/async-storage`.
+- `axios`.
 
 Dependência de desenvolvimento:
 
@@ -130,9 +147,9 @@ Demais commits sugeridos:
 
 ## Próxima etapa recomendada
 
-A próxima etapa natural é implementar o API service com Axios em `src/services/`, mantendo a mesma filosofia:
+A próxima etapa natural é conectar o `tablesSlice` ao serviço de mesas para paginação real e carregamento assíncrono, mantendo a mesma filosofia:
 
 - configuração simples;
 - interfaces claras;
 - sem abstrações prematuras;
-- preparado para conectar `tablesSlice` com carregamento real e scroll infinito.
+- comportamento previsível para scroll infinito.
