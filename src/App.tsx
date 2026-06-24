@@ -13,9 +13,12 @@ import {
   View,
   useColorScheme,
 } from 'react-native';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
+import { persistor, store } from './store';
 import { lightColors, darkColors } from './theme/colors';
 import { spacing, radii } from './theme/spacing';
 import { textStyles } from './theme/typography';
@@ -85,9 +88,13 @@ function AppContent() {
 
 export default function App() {
   return (
-    <SafeAreaProvider>
-      <AppContent />
-    </SafeAreaProvider>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <SafeAreaProvider>
+          <AppContent />
+        </SafeAreaProvider>
+      </PersistGate>
+    </Provider>
   );
 }
 
