@@ -24,7 +24,7 @@ A ordem planejada para evolução do projeto é:
 2. Theme e design tokens - concluído.
 3. Redux Store e AsyncStorage - concluído.
 4. API service com Axios - concluído.
-5. `tablesSlice` conectado com paginação real.
+5. `tablesSlice` conectado com paginação real - concluído.
 6. `TableCard`, `FilterTabs` e `SearchBar`.
 7. `TableMapScreen` com scroll infinito e refs.
 8. Modais, incluindo novo pedido.
@@ -37,7 +37,7 @@ A store foi implementada em `src/store/` com Redux Toolkit, React Redux, Redux P
 Arquivos principais:
 
 - `src/store/types.ts`: tipos globais de entidades e estados Redux.
-- `src/store/tablesSlice.ts`: estado de mesas, paginação, status e erro.
+- `src/store/tablesSlice.ts`: estado de mesas, paginação, status e erro. Contém thunks assíncronos `fetchTables` (primeira carga e mudança de filtro/busca) e `fetchMoreTables` (scroll infinito) que se conectam ao `tablesService`.
 - `src/store/uiSlice.ts`: filtro ativo e estado do modal de novo pedido.
 - `src/store/searchSlice.ts`: busca global separada, com query, query debounced e IDs de resultado.
 - `src/store/rootReducer.ts`: combinação dos reducers.
@@ -71,9 +71,9 @@ A chave usada no Redux Persist é `pigz:root`.
 
 ## Decisões de arquitetura
 
-A implementação atual evita thunks e chamadas HTTP dentro da store porque a etapa de API service ainda não foi implementada.
+O `tablesSlice` agora usa `createAsyncThunk` do Redux Toolkit para carregar dados via `tablesService`. Os thunks `fetchTables` e `fetchMoreTables` gerenciam automaticamente os estados `pending`, `fulfilled` e `rejected`, eliminando a necessidade de lógica manual de loading e erro.
 
-A decisão foi manter a store preparada para receber dados reais, mas ainda com reducers síncronas simples. Isso deixa a próxima etapa mais limpa: criar o service com Axios e depois conectar o fluxo de carregamento de mesas, filtros e paginação.
+Reducers síncronos redundantes (`setTables` e `appendTables`) foram removidos após a implementação dos thunks, mantendo apenas a via assíncrona como ponto de entrada para dados. Isso evita superfície de API ambígua e garante que todos os carregamentos passem pelo ciclo completo de estados.
 
 A busca foi criada como `searchSlice` separado porque a arquitetura anexada previa esse slice e ele tende a crescer quando `SearchBar` e debounce forem implementados.
 
@@ -118,7 +118,10 @@ Foram executados:
 
 Ambos passaram após ajuste do Jest para o preset correto e transformação das dependências ESM usadas pela stack Redux.
 
-O teste atual é um smoke test simples para garantir que o app renderiza com `Provider`, `PersistGate` e AsyncStorage mockado.
+A suíte de testes atual inclui:
+
+- `__tests__/App.test.tsx`: smoke test para garantir que o app renderiza com `Provider`, `PersistGate` e AsyncStorage mockado.
+- `__tests__/tablesSlice.test.ts`: 14 testes unitários cobrindo thunks assíncronos (`fetchTables`, `fetchMoreTables`), deduplicação de items, tratamento de paginação e estados de erro.
 
 ## Regras para agentes de IA
 
@@ -131,7 +134,9 @@ Ao continuar este projeto, agentes de IA devem seguir estas regras:
 - consultar este arquivo, o `challenge-readme.md` e `architecture.png`, antes de propor novas etapas;
 - priorizar mudanças incrementais, legíveis e fáceis de revisar.
 
-## Commits sugeridos para a etapa Redux
+## Commits sugeridos
+
+### Etapa Redux Store
 
 Como `src/store/types.ts` já havia sido commitado com `feat(store): global types of the Redux state`, a evolução posterior desse arquivo pode ser registrada com:
 
@@ -145,11 +150,17 @@ Demais commits sugeridos:
 - `feat(app): wrap app with redux provider`
 - `test(app): add smoke test for store wiring`
 
+### Etapa tablesSlice com paginação
+
+- `feat(store): add async thunks for tables pagination`
+- `test(store): add unit tests for tables slice thunks`
+
 ## Próxima etapa recomendada
 
-A próxima etapa natural é conectar o `tablesSlice` ao serviço de mesas para paginação real e carregamento assíncrono, mantendo a mesma filosofia:
+A próxima etapa natural é implementar os componentes de UI que consomem o `tablesSlice`:
 
-- configuração simples;
-- interfaces claras;
-- sem abstrações prematuras;
-- comportamento previsível para scroll infinito.
+- `TableCard`: card visual de mesa com status, nome do cliente, número de pedidos e tempo desde último pedido;
+- `FilterTabs`: tabs horizontais para filtrar mesas por status (`all`, `active`, `occupied`, `idle`);
+- `SearchBar`: input de busca com debounce integrado ao `searchSlice`.
+
+Esses componentes devem usar os hooks `useAppSelector` e `useAppDispatch` para ler estado e disparar as actions `fetchTables`, `setActiveFilter` e atualizações de busca. Manter a filosofia de simplicidade: componentes pequenos, responsabilidade única, sem lógica de negócio embutida.
