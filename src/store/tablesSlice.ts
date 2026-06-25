@@ -122,4 +122,13 @@ export const tablesSlice = createSlice({
 export const { resetPagination, setTablesStatus, setTablesError, clearTables } =
   tablesSlice.actions;
 
+// Seletores
+export const selectAllTables = (state: { tables: TablesState }) =>
+  state.tables.items;
+
+export const selectFilteredTables = (state: {
+  tables: TablesState;
+  ui?: { activeFilter?: string };
+}) => state.tables.items;
+
 export default tablesSlice.reducer;
