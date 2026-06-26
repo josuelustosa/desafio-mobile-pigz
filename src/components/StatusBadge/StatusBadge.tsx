@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useTheme } from '../../theme/useTheme';
 
-export type TableStatus = 'idle' | 'occupied' | 'active' | 'waiting';
+export type TableStatus = 'active' | 'waiting' | 'idle' | 'available';
 
 interface StatusBadgeProps {
   status: TableStatus;
@@ -16,10 +16,10 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
   const { colors } = useTheme();
 
   const statusColorMap: Record<TableStatus, string> = {
-    idle: colors.feedback.success,
-    occupied: colors.feedback.error,
-    active: colors.feedback.warning,
-    waiting: colors.feedback.info,
+    active: colors.feedback.success,
+    waiting: colors.feedback.error,
+    idle: colors.feedback.warning,
+    available: colors.text.tertiary,
   };
 
   const sizeMap = {

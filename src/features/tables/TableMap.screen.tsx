@@ -79,6 +79,17 @@ export const TableMapScreen: React.FC = () => {
     debouncedQuery,
   ]);
 
+  const handleRetry = useCallback(() => {
+    dispatch(
+      fetchTables({
+        page: 1,
+        perPage: 20,
+        filter: activeFilter === 'all' ? undefined : activeFilter,
+        query: debouncedQuery || '',
+      })
+    );
+  }, [dispatch, activeFilter, debouncedQuery]);
+
   const handleTablePress = useCallback((tableId: string) => {
     console.log('Table pressed:', tableId);
   }, []);
@@ -116,6 +127,8 @@ export const TableMapScreen: React.FC = () => {
         icon="❌"
         title="Erro ao carregar"
         message={error || 'Não foi possível carregar as mesas. Tente novamente.'}
+        actionLabel="Tentar novamente"
+        onAction={handleRetry}
       />
     );
   }
@@ -159,7 +172,12 @@ export const TableMapScreen: React.FC = () => {
             />
           </View>
         }
-        ListFooterComponent={<LoadingMore isLoading={status === 'loading'} />}
+        ListFooterComponent={
+          <LoadingMore
+            isLoading={status === 'loading'}
+            hasMore={pagination.hasNextPage}
+          />
+        }
       />
     </View>
   );
