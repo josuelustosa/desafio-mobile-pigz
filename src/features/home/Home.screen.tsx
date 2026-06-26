@@ -70,7 +70,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
             </View>
             <View style={styles.cardWrapper}>
               <ActionCard
-                icon="table_restaurant"
+                icon="cards"
                 label="Mapa de atendimento"
                 onPress={handleMapPress}
                 testID="action-card-table-map"
@@ -95,10 +95,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
       {/* New Order Modal */}
       <NewOrderModal
         isVisible={isNewOrderModalVisible}
-        onSelectType={(type) => {
-          setNewOrderModalVisible(false);
-          console.log('Order type selected:', type);
-        }}
+        onClose={() => setNewOrderModalVisible(false)}
       />
     </SafeAreaView>
   );

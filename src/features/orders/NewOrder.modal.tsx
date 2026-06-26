@@ -16,11 +16,13 @@ export type OrderType = 'table' | 'counter';
 
 interface NewOrderModalProps {
   isVisible: boolean;
+  onClose?: () => void;
   onSelectType?: (type: OrderType) => void;
 }
 
 export const NewOrderModal: React.FC<NewOrderModalProps> = ({
   isVisible,
+  onClose,
   onSelectType,
 }) => {
   const dispatch = useAppDispatch();
@@ -30,7 +32,8 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
   const handleClose = useCallback(() => {
     setShowComingSoon(false);
     dispatch(closeNewOrderModal());
-  }, [dispatch]);
+    onClose?.();
+  }, [dispatch, onClose]);
 
   const handleSelectType = useCallback(
     (type: OrderType) => {
