@@ -4,9 +4,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { useTheme } from '../theme/useTheme';
 
 // Screens
+import { HomeScreen } from '../features/home/Home.screen';
 import { TableMapScreen } from '../features/tables/TableMap.screen';
 
 export type RootStackParamList = {
+  Home: undefined;
   TableMap: undefined;
 };
 
@@ -18,10 +20,18 @@ export const RootNavigator: React.FC = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
+        initialRouteName="Home"
         screenOptions={{
           headerShown: false,
         }}
       >
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{
+            title: 'Home',
+          }}
+        />
         <Stack.Screen
           name="TableMap"
           component={TableMapScreen}
