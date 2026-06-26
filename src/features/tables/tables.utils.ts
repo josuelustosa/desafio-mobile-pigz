@@ -57,7 +57,14 @@ export const formatCurrency = (value: number): string => {
  */
 export const matchesFilter = (table: Table, filter: string): boolean => {
   if (filter === 'all') return true;
-  return table.status === filter;
+  if (filter === 'active') return table.status === 'active';
+  if (filter === 'waiting') return table.status === 'waiting';
+  if (filter === 'occupied') {
+    return table.status === 'active' || table.status === 'waiting' || table.status === 'idle';
+  }
+  if (filter === 'idle') return table.status === 'idle';
+  if (filter === 'available') return table.status === 'available';
+  return false;
 };
 
 /**

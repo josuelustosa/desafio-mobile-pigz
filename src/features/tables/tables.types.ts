@@ -36,8 +36,10 @@ export interface TableMapState {
 export const FILTER_OPTIONS: Array<{ label: string; value: FilterType }> = [
   { label: 'Visão geral', value: 'all' },
   { label: 'Em atendimento', value: 'active' },
-  { label: 'Ociosas', value: 'occupied' },
-  { label: 'Disponíveis', value: 'idle' },
+  { label: 'Aguardando Retorno', value: 'waiting' },
+  { label: 'Ocupadas', value: 'occupied' },
+  { label: 'Ociosas', value: 'idle' },
+  { label: 'Disponíveis', value: 'available' },
 ];
 
 /**

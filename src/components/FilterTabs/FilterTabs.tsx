@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { useTheme } from '../../theme/useTheme';
 
-export type FilterType = 'all' | 'active' | 'occupied' | 'idle';
+export type FilterType = 'all' | 'active' | 'waiting' | 'occupied' | 'idle' | 'available';
 
 interface FilterTabsProps {
   activeFilter: FilterType;
@@ -18,8 +18,10 @@ interface FilterTabsProps {
 const FILTERS: Array<{ label: string; value: FilterType }> = [
   { label: 'Visão geral', value: 'all' },
   { label: 'Em atendimento', value: 'active' },
-  { label: 'Ociosas', value: 'occupied' },
-  { label: 'Disponíveis', value: 'idle' },
+  { label: 'Aguardando Retorno', value: 'waiting' },
+  { label: 'Ocupadas', value: 'occupied' },
+  { label: 'Ociosas', value: 'idle' },
+  { label: 'Disponíveis', value: 'available' },
 ];
 
 export const FilterTabs: React.FC<FilterTabsProps> = ({

@@ -13,7 +13,7 @@ interface TablesMockQuery {
   query?: string;
 }
 
-const MAX_MOCK_TABLES = 500;
+const MAX_MOCK_TABLES = 44;
 const DEFAULT_PAGE = 1;
 const DEFAULT_PER_PAGE = 20;
 const NOW_MS = Date.now();
@@ -53,8 +53,10 @@ const minutesAgoToIso = (minutesAgo: number): string =>
 const normalizeFilter = (filter: unknown): FilterType => {
   switch (filter) {
     case 'active':
+    case 'waiting':
     case 'occupied':
     case 'idle':
+    case 'available':
     case 'all':
       return filter;
     default:
@@ -163,7 +165,19 @@ const matchesFilter = (table: Table, filter: FilterType): boolean => {
   }
 
   if (filter === 'occupied') {
-    return table.status === 'active' || table.status === 'waiting';
+    return (
+      table.status === 'active' ||
+      table.status === 'waiting' ||
+      table.status === 'idle'
+    );
+  }
+
+  if (filter === 'waiting') {
+    return table.status === 'waiting';
+  }
+
+  if (filter === 'available') {
+    return table.status === 'available';
   }
 
   return table.status === 'idle';

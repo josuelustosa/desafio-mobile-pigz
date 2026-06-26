@@ -11,7 +11,7 @@
 
 export type TableStatus = 'active' | 'waiting' | 'idle' | 'available';
 
-export type FilterType = 'all' | 'active' | 'occupied' | 'idle';
+export type FilterType = 'all' | 'active' | 'waiting' | 'occupied' | 'idle' | 'available';
 
 export interface Order {
   id: string;
