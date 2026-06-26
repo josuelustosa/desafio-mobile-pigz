@@ -57,6 +57,13 @@ export interface TablesState {
   error: string | null;
 }
 
+export interface OrdersState {
+  items: Order[];
+  selectedOrderId: string | null;
+  status: RequestStatus;
+  error: string | null;
+}
+
 export interface UiState {
   activeFilter: FilterType;
   isNewOrderModalOpen: boolean;
