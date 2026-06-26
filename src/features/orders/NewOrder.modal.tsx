@@ -10,6 +10,7 @@ import {
 import { useAppDispatch } from '../../store/hooks';
 import { closeNewOrderModal } from '../../store/uiSlice';
 import { useTheme } from '../../theme/useTheme';
+import { Icon } from '../../components/Icon';
 
 export type OrderType = 'table' | 'counter';
 
@@ -23,7 +24,7 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
   onSelectType,
 }) => {
   const dispatch = useAppDispatch();
-  const { colors, spacing } = useTheme();
+  const { colors, spacing, textStyles } = useTheme();
   const [showComingSoon, setShowComingSoon] = useState(false);
 
   const handleClose = useCallback(() => {
@@ -69,13 +70,12 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
       marginBottom: spacing.lg,
     },
     title: {
-      fontSize: 18,
-      fontWeight: '700',
+      ...textStyles.headingMd,
       color: colors.text.primary,
       marginBottom: spacing.xs,
     },
     subtitle: {
-      fontSize: 14,
+      ...textStyles.bodyMd,
       color: colors.text.secondary,
     },
     optionsContainer: {
@@ -91,22 +91,15 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
       borderRadius: 12,
     },
     optionIcon: {
-      fontSize: 24,
       marginRight: spacing.md,
       width: 36,
-      textAlign: 'center',
     },
     optionContent: {
       flex: 1,
     },
     optionTitle: {
-      fontSize: 15,
-      fontWeight: '600',
+      ...textStyles.labelLg,
       color: colors.text.primary,
-    },
-    optionChevron: {
-      fontSize: 16,
-      color: colors.text.tertiary,
     },
     divider: {
       height: 1,
@@ -118,31 +111,27 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
       alignItems: 'center',
     },
     cancelText: {
-      fontSize: 15,
+      ...textStyles.labelLg,
       color: colors.text.secondary,
-      fontWeight: '500',
     },
     // Coming Soon state
     comingSoonContainer: {
       alignItems: 'center',
       paddingVertical: spacing.xl,
     },
-    comingSoonIcon: {
-      fontSize: 48,
+    comingSoonIconContainer: {
       marginBottom: spacing.md,
     },
     comingSoonTitle: {
-      fontSize: 17,
-      fontWeight: '700',
+      ...textStyles.headingSm,
       color: colors.text.primary,
       marginBottom: spacing.sm,
       textAlign: 'center',
     },
     comingSoonMessage: {
-      fontSize: 14,
+      ...textStyles.bodyMd,
       color: colors.text.secondary,
       textAlign: 'center',
-      lineHeight: 20,
       maxWidth: 260,
     },
   });
@@ -167,7 +156,13 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
               {showComingSoon ? (
                 <>
                   <View style={styles.comingSoonContainer}>
-                    <Text style={styles.comingSoonIcon}>🚧</Text>
+                    <View style={styles.comingSoonIconContainer}>
+                      <Icon
+                        name="settings"
+                        size={48}
+                        color={colors.text.tertiary}
+                      />
+                    </View>
                     <Text style={styles.comingSoonTitle}>
                       Em desenvolvimento
                     </Text>
@@ -202,11 +197,21 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
                       onPress={() => handleSelectType('table')}
                       activeOpacity={0.7}
                     >
-                      <Text style={styles.optionIcon}>🪑</Text>
+                      <View style={styles.optionIcon}>
+                        <Icon
+                          name="table_restaurant"
+                          size={24}
+                          color={colors.text.primary}
+                        />
+                      </View>
                       <View style={styles.optionContent}>
                         <Text style={styles.optionTitle}>Mesa/Comanda</Text>
                       </View>
-                      <Text style={styles.optionChevron}>›</Text>
+                      <Icon
+                        name="chevron_right"
+                        size={20}
+                        color={colors.text.tertiary}
+                      />
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -214,11 +219,21 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
                       onPress={() => handleSelectType('counter')}
                       activeOpacity={0.7}
                     >
-                      <Text style={styles.optionIcon}>🛍️</Text>
+                      <View style={styles.optionIcon}>
+                        <Icon
+                          name="shopping_bag_speed"
+                          size={24}
+                          color={colors.text.primary}
+                        />
+                      </View>
                       <View style={styles.optionContent}>
                         <Text style={styles.optionTitle}>Balcão</Text>
                       </View>
-                      <Text style={styles.optionChevron}>›</Text>
+                      <Icon
+                        name="chevron_right"
+                        size={20}
+                        color={colors.text.tertiary}
+                      />
                     </TouchableOpacity>
                   </View>
 

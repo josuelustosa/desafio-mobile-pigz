@@ -47,10 +47,10 @@ export function normalizeFont(size: number): number {
 // ─── Família tipográfica ──────────────────────────────────────────────────────
 
 export const fontFamily = {
-  regular: 'System', // troque pelo nome da fonte customizada se houver
-  medium: 'System',
-  semiBold: 'System',
-  bold: 'System',
+  regular: 'Poppins-Regular',
+  medium: 'Poppins-Medium',
+  semiBold: 'Poppins-SemiBold',
+  bold: 'Poppins-Bold',
 } as const;
 
 // ─── Pesos ────────────────────────────────────────────────────────────────────
@@ -94,21 +94,25 @@ export const lineHeight = {
 export const textStyles = {
   /** Títulos de tela / section */
   headingXl: {
+    fontFamily: fontFamily.bold,
     fontSize: fontSize.xxxl,
     fontWeight: fontWeight.bold,
     lineHeight: fontSize.xxxl * lineHeight.tight,
   },
   headingLg: {
+    fontFamily: fontFamily.bold,
     fontSize: fontSize.xxl,
     fontWeight: fontWeight.bold,
     lineHeight: fontSize.xxl * lineHeight.tight,
   },
   headingMd: {
+    fontFamily: fontFamily.semiBold,
     fontSize: fontSize.xl,
     fontWeight: fontWeight.semiBold,
     lineHeight: fontSize.xl * lineHeight.tight,
   },
   headingSm: {
+    fontFamily: fontFamily.semiBold,
     fontSize: fontSize.lg,
     fontWeight: fontWeight.semiBold,
     lineHeight: fontSize.lg * lineHeight.normal,
@@ -116,16 +120,19 @@ export const textStyles = {
 
   /** Corpo de texto */
   bodyLg: {
+    fontFamily: fontFamily.regular,
     fontSize: fontSize.lg,
     fontWeight: fontWeight.regular,
     lineHeight: fontSize.lg * lineHeight.relaxed,
   },
   bodyMd: {
+    fontFamily: fontFamily.regular,
     fontSize: fontSize.md,
     fontWeight: fontWeight.regular,
     lineHeight: fontSize.md * lineHeight.relaxed,
   },
   bodySm: {
+    fontFamily: fontFamily.regular,
     fontSize: fontSize.sm,
     fontWeight: fontWeight.regular,
     lineHeight: fontSize.sm * lineHeight.relaxed,
@@ -133,16 +140,19 @@ export const textStyles = {
 
   /** Labels e metadados */
   labelLg: {
+    fontFamily: fontFamily.medium,
     fontSize: fontSize.md,
     fontWeight: fontWeight.medium,
     lineHeight: fontSize.md * lineHeight.normal,
   },
   labelMd: {
+    fontFamily: fontFamily.medium,
     fontSize: fontSize.sm,
     fontWeight: fontWeight.medium,
     lineHeight: fontSize.sm * lineHeight.normal,
   },
   labelSm: {
+    fontFamily: fontFamily.medium,
     fontSize: fontSize.xs,
     fontWeight: fontWeight.medium,
     lineHeight: fontSize.xs * lineHeight.normal,
@@ -150,6 +160,7 @@ export const textStyles = {
 
   /** Número de mesa — destaque grande */
   tableNumber: {
+    fontFamily: fontFamily.bold,
     fontSize: fontSize.xxxl,
     fontWeight: fontWeight.bold,
     lineHeight: fontSize.xxxl * lineHeight.tight,
@@ -157,6 +168,7 @@ export const textStyles = {
 
   /** Valor monetário em card */
   currency: {
+    fontFamily: fontFamily.semiBold,
     fontSize: fontSize.md,
     fontWeight: fontWeight.semiBold,
     lineHeight: fontSize.md * lineHeight.normal,

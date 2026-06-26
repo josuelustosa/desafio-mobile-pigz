@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useTheme } from '../../theme/useTheme';
+import { Icon } from '../../components/Icon';
 import type { Table } from '../../store/types';
 
 interface TableCardProps {
@@ -16,7 +17,7 @@ export const TableCard: React.FC<TableCardProps> = ({
   width,
   height,
 }) => {
-  const { colors, spacing } = useTheme();
+  const { colors, spacing, textStyles } = useTheme();
 
   const statusColors = colors.tableStatus;
   const cardBackground =
@@ -37,20 +38,19 @@ export const TableCard: React.FC<TableCardProps> = ({
     card: {
       flex: 1,
       padding: spacing.sm,
-      justifyContent: 'space-between',
+      // justifyContent: 'space-between',
     },
     header: {
       marginBottom: spacing.md,
     },
     tableNumber: {
-      fontSize: 24,
-      fontWeight: '700',
+      ...textStyles.tableNumber,
       color: colors.text.primary,
       marginBottom: spacing.xs,
+      fontSize: 24,
     },
     customerName: {
-      fontSize: 14,
-      fontWeight: '600',
+      ...textStyles.labelMd,
       color: colors.text.primary,
     },
     body: {
@@ -61,14 +61,9 @@ export const TableCard: React.FC<TableCardProps> = ({
       alignItems: 'center',
       gap: spacing.xs,
     },
-    infoIcon: {
-      fontSize: 12,
-      marginRight: spacing.xs,
-    },
     infoText: {
-      fontSize: 12,
+      ...textStyles.labelSm,
       color: colors.text.primary,
-      fontWeight: '500',
     },
   });
 
@@ -94,7 +89,7 @@ export const TableCard: React.FC<TableCardProps> = ({
         <View style={styles.body}>
           {table.orders.length > 0 && (
             <View style={styles.infoRow}>
-              <Text style={styles.infoIcon}>📋</Text>
+              <Icon name="cards" size={14} color={colors.text.primary} />
               <Text style={styles.infoText}>{table.orders.length} pedidos</Text>
             </View>
           )}
@@ -102,7 +97,7 @@ export const TableCard: React.FC<TableCardProps> = ({
           {table.minutesSinceLastOrder !== null &&
             table.minutesSinceLastOrder > 0 && (
               <View style={styles.infoRow}>
-                <Text style={styles.infoIcon}>⏱️</Text>
+                <Icon name="schedule" size={14} color={colors.text.primary} />
                 <Text style={styles.infoText}>
                   {table.minutesSinceLastOrder}min
                 </Text>
@@ -111,14 +106,18 @@ export const TableCard: React.FC<TableCardProps> = ({
 
           {totalValue > 0 && (
             <View style={styles.infoRow}>
-              <Text style={styles.infoIcon}>💵</Text>
+              <Icon name="paid" size={14} color={colors.text.primary} />
               <Text style={styles.infoText}>R${totalValue.toFixed(2)}</Text>
             </View>
           )}
 
           {table.attendantName && (
             <View style={styles.infoRow}>
-              <Text style={styles.infoIcon}>👤</Text>
+              <Icon
+                name="room_service"
+                size={14}
+                color={colors.text.primary}
+              />
               <Text style={styles.infoText}>{table.attendantName}</Text>
             </View>
           )}

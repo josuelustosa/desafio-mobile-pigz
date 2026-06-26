@@ -11,7 +11,7 @@ export const LoadingMore: React.FC<LoadingMoreProps> = ({
   isLoading,
   hasMore = true,
 }) => {
-  const { colors, spacing } = useTheme();
+  const { colors, spacing, textStyles } = useTheme();
 
   const styles = StyleSheet.create({
     container: {
@@ -21,7 +21,7 @@ export const LoadingMore: React.FC<LoadingMoreProps> = ({
       backgroundColor: colors.background.tertiary,
     },
     endMessage: {
-      fontSize: 13,
+      ...textStyles.bodySm,
       color: colors.text.secondary,
     },
   });
