@@ -32,9 +32,6 @@ export const FilterTabs: React.FC<FilterTabsProps> = ({
   const scrollViewRef = useRef<ScrollView>(null);
 
   const styles = StyleSheet.create({
-    container: {
-      backgroundColor: colors.background.primary,
-    },
     scrollView: {
       paddingVertical: spacing.sm,
       paddingHorizontal: spacing.md,
@@ -70,7 +67,7 @@ export const FilterTabs: React.FC<FilterTabsProps> = ({
   };
 
   return (
-    <View style={styles.container}>
+    <View>
       <ScrollView
         ref={scrollViewRef}
         horizontal
@@ -79,7 +76,7 @@ export const FilterTabs: React.FC<FilterTabsProps> = ({
         contentContainerStyle={styles.scrollView}
       >
         <View style={styles.tabsContainer}>
-          {FILTERS.map((filter) => (
+          {FILTERS.map(filter => (
             <TouchableOpacity
               key={filter.value}
               style={[

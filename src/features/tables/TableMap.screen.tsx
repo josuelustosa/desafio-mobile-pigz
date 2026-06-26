@@ -4,6 +4,7 @@ import {
   FlatList,
   StyleSheet,
   ActivityIndicator,
+  useWindowDimensions,
 } from 'react-native';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
@@ -26,12 +27,20 @@ import type { Table } from '../../store/types';
 export const TableMapScreen: React.FC = () => {
   const dispatch = useAppDispatch();
   const { colors, spacing } = useTheme();
+  const { width: windowWidth } = useWindowDimensions();
   const { activeFilter, handleFilterChange } = useTableFilter();
+  const gridColumns = 3;
+  const cardMargin = spacing.xs;
+  const gridPaddingHorizontal = spacing.xs;
+  const tableCardWidth =
+    (windowWidth - gridPaddingHorizontal * 2 - cardMargin * 2 * gridColumns) /
+    gridColumns;
+  const tableCardHeight = tableCardWidth * 1.6;
 
   const tables = useAppSelector(selectFilteredTables);
-  const { status, error, pagination } = useAppSelector((state) => state.tables);
-  const { debouncedQuery } = useAppSelector((state) => state.search);
-  const searchQuery = useAppSelector((state) => state.search.query);
+  const { status, error, pagination } = useAppSelector(state => state.tables);
+  const { debouncedQuery } = useAppSelector(state => state.search);
+  const searchQuery = useAppSelector(state => state.search.query);
 
   useEffect(() => {
     if (tables.length === 0 && status === 'idle') {
@@ -41,31 +50,27 @@ export const TableMapScreen: React.FC = () => {
           perPage: 20,
           filter: activeFilter === 'all' ? undefined : activeFilter,
           query: debouncedQuery || '',
-        })
+        }),
       );
     }
-  }, []);
+  }, [activeFilter, debouncedQuery, dispatch, status, tables.length]);
 
   const handleSearchChange = useCallback(
     (query: string) => {
       dispatch(setSearchQuery(query));
     },
-    [dispatch]
+    [dispatch],
   );
 
   const handleEndReached = useCallback(() => {
-    if (
-      pagination.hasNextPage &&
-      status !== 'loading' &&
-      tables.length > 0
-    ) {
+    if (pagination.hasNextPage && status !== 'loading' && tables.length > 0) {
       dispatch(
         fetchMoreTables({
           page: pagination.currentPage + 1,
           perPage: pagination.perPage,
           filter: activeFilter === 'all' ? undefined : activeFilter,
           query: debouncedQuery || '',
-        })
+        }),
       );
     }
   }, [
@@ -86,7 +91,7 @@ export const TableMapScreen: React.FC = () => {
         perPage: 20,
         filter: activeFilter === 'all' ? undefined : activeFilter,
         query: debouncedQuery || '',
-      })
+      }),
     );
   }, [dispatch, activeFilter, debouncedQuery]);
 
@@ -97,13 +102,14 @@ export const TableMapScreen: React.FC = () => {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: colors.background.primary,
+      backgroundColor: colors.background.tertiary,
     },
     listContent: {
       paddingBottom: spacing.lg,
     },
     gridContainer: {
-      paddingHorizontal: spacing.sm,
+      paddingHorizontal: spacing.xs,
+      justifyContent: 'flex-start',
     },
     loadingContainer: {
       flex: 1,
@@ -126,7 +132,9 @@ export const TableMapScreen: React.FC = () => {
       <EmptyState
         icon="❌"
         title="Erro ao carregar"
-        message={error || 'Não foi possível carregar as mesas. Tente novamente.'}
+        message={
+          error || 'Não foi possível carregar as mesas. Tente novamente.'
+        }
         actionLabel="Tentar novamente"
         onAction={handleRetry}
       />
@@ -137,7 +145,10 @@ export const TableMapScreen: React.FC = () => {
     return (
       <View style={styles.container}>
         <SearchBar query={searchQuery} onQueryChange={handleSearchChange} />
-        <FilterTabs activeFilter={activeFilter} onFilterChange={handleFilterChange} />
+        <FilterTabs
+          activeFilter={activeFilter}
+          onFilterChange={handleFilterChange}
+        />
         <EmptyState
           icon="🗺️"
           title="Nenhuma mesa encontrada"
@@ -148,7 +159,12 @@ export const TableMapScreen: React.FC = () => {
   }
 
   const renderTableCard = ({ item }: { item: Table }) => (
-    <TableCard table={item} onPress={handleTablePress} />
+    <TableCard
+      table={item}
+      onPress={handleTablePress}
+      width={tableCardWidth}
+      height={tableCardHeight}
+    />
   );
 
   return (
@@ -156,7 +172,7 @@ export const TableMapScreen: React.FC = () => {
       <FlatList
         data={tables}
         renderItem={renderTableCard}
-        keyExtractor={(item) => item.id}
+        keyExtractor={item => item.id}
         numColumns={3}
         columnWrapperStyle={styles.gridContainer}
         contentContainerStyle={styles.listContent}

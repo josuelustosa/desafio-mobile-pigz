@@ -18,11 +18,11 @@ export const LoadingMore: React.FC<LoadingMoreProps> = ({
       paddingVertical: spacing.lg,
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: colors.background.primary,
+      backgroundColor: colors.background.tertiary,
     },
     endMessage: {
       fontSize: 13,
-      color: colors.text.tertiary,
+      color: colors.text.secondary,
     },
   });
 

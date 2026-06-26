@@ -6,9 +6,16 @@ import type { Table } from '../../store/types';
 interface TableCardProps {
   table: Table;
   onPress: (tableId: string) => void;
+  width: number;
+  height: number;
 }
 
-export const TableCard: React.FC<TableCardProps> = ({ table, onPress }) => {
+export const TableCard: React.FC<TableCardProps> = ({
+  table,
+  onPress,
+  width,
+  height,
+}) => {
   const { colors, spacing } = useTheme();
 
   const statusColors = colors.tableStatus;
@@ -18,22 +25,25 @@ export const TableCard: React.FC<TableCardProps> = ({ table, onPress }) => {
 
   const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      margin: spacing.sm,
+      width,
+      height,
+      flexGrow: 0,
+      flexShrink: 0,
+      margin: spacing.xs,
       borderRadius: 12,
       overflow: 'hidden',
       backgroundColor: cardBackground,
     },
     card: {
       flex: 1,
-      padding: spacing.md,
+      padding: spacing.sm,
       justifyContent: 'space-between',
     },
     header: {
       marginBottom: spacing.md,
     },
     tableNumber: {
-      fontSize: 28,
+      fontSize: 24,
       fontWeight: '700',
       color: colors.text.primary,
       marginBottom: spacing.xs,
@@ -52,7 +62,7 @@ export const TableCard: React.FC<TableCardProps> = ({ table, onPress }) => {
       gap: spacing.xs,
     },
     infoIcon: {
-      fontSize: 14,
+      fontSize: 12,
       marginRight: spacing.xs,
     },
     infoText: {
@@ -64,7 +74,7 @@ export const TableCard: React.FC<TableCardProps> = ({ table, onPress }) => {
 
   const totalValue = table.orders.reduce(
     (sum, order) => sum + order.totalAmount,
-    0
+    0,
   );
 
   return (
@@ -75,7 +85,7 @@ export const TableCard: React.FC<TableCardProps> = ({ table, onPress }) => {
     >
       <View style={styles.card}>
         <View style={styles.header}>
-          <Text style={styles.tableNumber}>Mesa {table.number}</Text>
+          <Text style={styles.tableNumber}>{table.number}</Text>
           <Text style={styles.customerName}>
             {table.clientName || 'Sem cliente'}
           </Text>
