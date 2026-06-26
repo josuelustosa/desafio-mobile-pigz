@@ -122,4 +122,26 @@ export const tablesSlice = createSlice({
 export const { resetPagination, setTablesStatus, setTablesError, clearTables } =
   tablesSlice.actions;
 
+// Seletores
+export const selectAllTables = (state: { tables: TablesState }) =>
+  state.tables.items;
+
+export const selectFilteredTables = (state: {
+  tables: TablesState;
+  ui?: { activeFilter?: string };
+}) => state.tables.items;
+
+export const selectTablesLoading = (state: { tables: TablesState }) =>
+  state.tables.status === 'loading';
+
+export const selectTablesError = (state: { tables: TablesState }) =>
+  state.tables.error;
+
+export const selectTablesPagination = (state: { tables: TablesState }) =>
+  state.tables.pagination;
+
+export const selectTableById =
+  (id: string) => (state: { tables: TablesState }) =>
+    state.tables.items.find(table => table.id === id);
+
 export default tablesSlice.reducer;

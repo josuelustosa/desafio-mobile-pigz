@@ -6,83 +6,22 @@
  */
 
 import React from 'react';
-import {
-  StatusBar,
-  StyleSheet,
-  Text,
-  View,
-  useColorScheme,
-} from 'react-native';
+import { StatusBar, useColorScheme } from 'react-native';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { persistor, store } from './store';
-import { lightColors, darkColors } from './theme/colors';
-import { spacing, radii } from './theme/spacing';
-import { textStyles } from './theme/typography';
+import { RootNavigator } from './navigation';
 
 function AppContent() {
   const isDarkMode = useColorScheme() === 'dark';
-  const colors = isDarkMode ? darkColors : lightColors;
 
   return (
-    <SafeAreaView
-      style={[
-        styles.container,
-        {
-          backgroundColor: colors.background.primary,
-        },
-      ]}
-      edges={['top']}
-    >
+    <>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-
-      <View style={styles.content}>
-        <Text style={[textStyles.headingLg, { color: colors.text.primary }]}>
-          Hello,
-        </Text>
-
-        <Text
-          style={[
-            textStyles.headingMd,
-            {
-              color: colors.brand.default,
-              marginTop: spacing.xs,
-            },
-          ]}
-        >
-          Fulano de Tal
-        </Text>
-
-        <Text
-          style={[
-            textStyles.bodyMd,
-            {
-              color: colors.text.secondary,
-              marginTop: spacing.lg,
-            },
-          ]}
-        >
-          Seja bem-vindo ao aplicativo.
-        </Text>
-
-        <View style={styles.skeletonContainer}>
-          {[1, 2, 3].map(item => (
-            <View
-              key={item}
-              style={[
-                styles.skeletonButton,
-                {
-                  backgroundColor: colors.background.tertiary,
-                },
-              ]}
-            />
-          ))}
-        </View>
-      </View>
-    </SafeAreaView>
+      <RootNavigator />
+    </>
   );
 }
 
@@ -97,25 +36,3 @@ export default function App() {
     </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-
-  content: {
-    flex: 1,
-    paddingHorizontal: spacing.xl,
-    paddingTop: spacing.xxxl,
-  },
-
-  skeletonContainer: {
-    marginTop: spacing.xxxl,
-    gap: spacing.md,
-  },
-
-  skeletonButton: {
-    height: 56,
-    borderRadius: radii.md,
-  },
-});

@@ -1,4 +1,5 @@
 export * from './hooks';
+export * from './ordersSlice';
 export * from './rootReducer';
 export * from './searchSlice';
 export * from './store';
