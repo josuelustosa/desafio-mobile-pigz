@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   View,
   Modal,
@@ -7,7 +7,7 @@ import {
   Text,
   SafeAreaView,
 } from 'react-native';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { useAppDispatch } from '../../store/hooks';
 import { closeNewOrderModal } from '../../store/uiSlice';
 import { useTheme } from '../../theme/useTheme';
 
@@ -24,8 +24,10 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
 }) => {
   const dispatch = useAppDispatch();
   const { colors, spacing } = useTheme();
+  const [showComingSoon, setShowComingSoon] = useState(false);
 
   const handleClose = useCallback(() => {
+    setShowComingSoon(false);
     dispatch(closeNewOrderModal());
   }, [dispatch]);
 
@@ -33,25 +35,34 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
     (type: OrderType) => {
       if (onSelectType) {
         onSelectType(type);
+      } else {
+        setShowComingSoon(true);
       }
-      handleClose();
     },
-    [onSelectType, handleClose]
+    [onSelectType],
   );
 
   const styles = StyleSheet.create({
-    container: {
+    overlay: {
       flex: 1,
       justifyContent: 'flex-end',
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
-    modal: {
+    sheet: {
       backgroundColor: colors.background.primary,
       borderTopLeftRadius: 20,
       borderTopRightRadius: 20,
-      paddingTop: spacing.lg,
+      paddingTop: spacing.md,
       paddingHorizontal: spacing.lg,
       paddingBottom: spacing.xl,
+    },
+    handle: {
+      width: 40,
+      height: 4,
+      borderRadius: 2,
+      backgroundColor: colors.border.default,
+      alignSelf: 'center',
+      marginBottom: spacing.lg,
     },
     header: {
       alignItems: 'center',
@@ -68,8 +79,8 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
       color: colors.text.secondary,
     },
     optionsContainer: {
-      gap: spacing.md,
-      marginBottom: spacing.lg,
+      gap: spacing.sm,
+      marginBottom: spacing.md,
     },
     option: {
       flexDirection: 'row',
@@ -80,33 +91,59 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
       borderRadius: 12,
     },
     optionIcon: {
-      fontSize: 32,
+      fontSize: 24,
       marginRight: spacing.md,
+      width: 36,
+      textAlign: 'center',
     },
     optionContent: {
       flex: 1,
     },
     optionTitle: {
-      fontSize: 16,
+      fontSize: 15,
       fontWeight: '600',
       color: colors.text.primary,
-      marginBottom: spacing.xs,
     },
-    optionDescription: {
-      fontSize: 12,
-      color: colors.text.secondary,
+    optionChevron: {
+      fontSize: 16,
+      color: colors.text.tertiary,
     },
-    closeButton: {
+    divider: {
+      height: 1,
+      backgroundColor: colors.border.default,
+      marginVertical: spacing.md,
+    },
+    cancelButton: {
       paddingVertical: spacing.md,
       alignItems: 'center',
-      borderTopWidth: 1,
-      borderTopColor: colors.border.default,
-      marginTop: spacing.lg,
     },
-    closeButtonText: {
-      fontSize: 14,
+    cancelText: {
+      fontSize: 15,
       color: colors.text.secondary,
       fontWeight: '500',
+    },
+    // Coming Soon state
+    comingSoonContainer: {
+      alignItems: 'center',
+      paddingVertical: spacing.xl,
+    },
+    comingSoonIcon: {
+      fontSize: 48,
+      marginBottom: spacing.md,
+    },
+    comingSoonTitle: {
+      fontSize: 17,
+      fontWeight: '700',
+      color: colors.text.primary,
+      marginBottom: spacing.sm,
+      textAlign: 'center',
+    },
+    comingSoonMessage: {
+      fontSize: 14,
+      color: colors.text.secondary,
+      textAlign: 'center',
+      lineHeight: 20,
+      maxWidth: 260,
     },
   });
 
@@ -117,52 +154,89 @@ export const NewOrderModal: React.FC<NewOrderModalProps> = ({
       animationType="slide"
       onRequestClose={handleClose}
     >
-      <View style={styles.container}>
-        <SafeAreaView style={styles.modal}>
-          <View style={styles.header}>
-            <Text style={styles.title}>Novo pedido</Text>
-            <Text style={styles.subtitle}>Selecione o tipo de pedido</Text>
-          </View>
+      <TouchableOpacity
+        style={styles.overlay}
+        activeOpacity={1}
+        onPress={handleClose}
+      >
+        <SafeAreaView>
+          <TouchableOpacity activeOpacity={1} onPress={() => {}}>
+            <View style={styles.sheet}>
+              <View style={styles.handle} />
 
-          <View style={styles.optionsContainer}>
-            <TouchableOpacity
-              style={styles.option}
-              onPress={() => handleSelectType('table')}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.optionIcon}>🪑</Text>
-              <View style={styles.optionContent}>
-                <Text style={styles.optionTitle}>Mesa/Comanda</Text>
-                <Text style={styles.optionDescription}>
-                  Novo pedido para uma mesa
-                </Text>
-              </View>
-            </TouchableOpacity>
+              {showComingSoon ? (
+                <>
+                  <View style={styles.comingSoonContainer}>
+                    <Text style={styles.comingSoonIcon}>🚧</Text>
+                    <Text style={styles.comingSoonTitle}>
+                      Em desenvolvimento
+                    </Text>
+                    <Text style={styles.comingSoonMessage}>
+                      Esta funcionalidade será disponibilizada em breve. Fique
+                      de olho nas próximas atualizações!
+                    </Text>
+                  </View>
 
-            <TouchableOpacity
-              style={styles.option}
-              onPress={() => handleSelectType('counter')}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.optionIcon}>💼</Text>
-              <View style={styles.optionContent}>
-                <Text style={styles.optionTitle}>Balcão</Text>
-                <Text style={styles.optionDescription}>
-                  Pedido para levar ou viagem
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
+                  <View style={styles.divider} />
 
-          <TouchableOpacity
-            style={styles.closeButton}
-            onPress={handleClose}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.closeButtonText}>Cancelar</Text>
+                  <TouchableOpacity
+                    style={styles.cancelButton}
+                    onPress={handleClose}
+                    activeOpacity={0.7}
+                  >
+                    <Text style={styles.cancelText}>Fechar</Text>
+                  </TouchableOpacity>
+                </>
+              ) : (
+                <>
+                  <View style={styles.header}>
+                    <Text style={styles.title}>Novo pedido</Text>
+                    <Text style={styles.subtitle}>
+                      Selecione o tipo de pedido
+                    </Text>
+                  </View>
+
+                  <View style={styles.optionsContainer}>
+                    <TouchableOpacity
+                      style={styles.option}
+                      onPress={() => handleSelectType('table')}
+                      activeOpacity={0.7}
+                    >
+                      <Text style={styles.optionIcon}>🪑</Text>
+                      <View style={styles.optionContent}>
+                        <Text style={styles.optionTitle}>Mesa/Comanda</Text>
+                      </View>
+                      <Text style={styles.optionChevron}>›</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={styles.option}
+                      onPress={() => handleSelectType('counter')}
+                      activeOpacity={0.7}
+                    >
+                      <Text style={styles.optionIcon}>🛍️</Text>
+                      <View style={styles.optionContent}>
+                        <Text style={styles.optionTitle}>Balcão</Text>
+                      </View>
+                      <Text style={styles.optionChevron}>›</Text>
+                    </TouchableOpacity>
+                  </View>
+
+                  <View style={styles.divider} />
+
+                  <TouchableOpacity
+                    style={styles.cancelButton}
+                    onPress={handleClose}
+                    activeOpacity={0.7}
+                  >
+                    <Text style={styles.cancelText}>Cancelar</Text>
+                  </TouchableOpacity>
+                </>
+              )}
+            </View>
           </TouchableOpacity>
         </SafeAreaView>
-      </View>
+      </TouchableOpacity>
     </Modal>
   );
 };

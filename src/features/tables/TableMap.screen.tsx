@@ -5,6 +5,8 @@ import {
   StyleSheet,
   ActivityIndicator,
   useWindowDimensions,
+  TouchableOpacity,
+  Text,
 } from 'react-native';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
@@ -13,6 +15,7 @@ import {
   selectFilteredTables,
 } from '../../store/tablesSlice';
 import { setSearchQuery } from '../../store/searchSlice';
+import { openNewOrderModal, closeNewOrderModal } from '../../store/uiSlice';
 import { useTableFilter } from '../../hooks/useTableFilter';
 import { useTheme } from '../../theme/useTheme';
 import {
@@ -22,6 +25,7 @@ import {
   LoadingMore,
 } from '../../components';
 import { TableCard } from './TableCard.component';
+import { NewOrderModal } from '../orders/NewOrder.modal';
 import type { Table } from '../../store/types';
 
 export const TableMapScreen: React.FC = () => {
@@ -41,6 +45,16 @@ export const TableMapScreen: React.FC = () => {
   const { status, error, pagination } = useAppSelector(state => state.tables);
   const { debouncedQuery } = useAppSelector(state => state.search);
   const searchQuery = useAppSelector(state => state.search.query);
+
+  const isModalOpen = useAppSelector(state => state.ui.isNewOrderModalOpen);
+
+  const handleOpenNewOrder = useCallback(() => {
+    dispatch(openNewOrderModal(null));
+  }, [dispatch]);
+
+  const handleCloseNewOrder = useCallback(() => {
+    dispatch(closeNewOrderModal());
+  }, [dispatch]);
 
   useEffect(() => {
     if (tables.length === 0 && status === 'idle') {
@@ -116,6 +130,27 @@ export const TableMapScreen: React.FC = () => {
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: colors.background.primary,
+    },
+    fab: {
+      position: 'absolute',
+      bottom: spacing.xl,
+      right: spacing.lg,
+      backgroundColor: colors.brand.default,
+      width: 56,
+      height: 56,
+      borderRadius: 28,
+      justifyContent: 'center',
+      alignItems: 'center',
+      elevation: 6,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 3 },
+      shadowOpacity: 0.2,
+      shadowRadius: 4,
+    },
+    fabIcon: {
+      fontSize: 28,
+      color: '#FFFFFF',
+      lineHeight: 32,
     },
   });
 
@@ -195,6 +230,16 @@ export const TableMapScreen: React.FC = () => {
           />
         }
       />
+
+      <TouchableOpacity
+        style={styles.fab}
+        onPress={handleOpenNewOrder}
+        activeOpacity={0.85}
+      >
+        <Text style={styles.fabIcon}>+</Text>
+      </TouchableOpacity>
+
+      <NewOrderModal isVisible={isModalOpen} />
     </View>
   );
 };
