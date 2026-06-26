@@ -6,7 +6,6 @@ import {
   ActivityIndicator,
   useWindowDimensions,
   TouchableOpacity,
-  Text,
 } from 'react-native';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
@@ -23,6 +22,7 @@ import {
   FilterTabs,
   EmptyState,
   LoadingMore,
+  Icon,
 } from '../../components';
 import { TableCard } from './TableCard.component';
 import { NewOrderModal } from '../orders/NewOrder.modal';
@@ -147,11 +147,6 @@ export const TableMapScreen: React.FC = () => {
       shadowOpacity: 0.2,
       shadowRadius: 4,
     },
-    fabIcon: {
-      fontSize: 28,
-      color: '#FFFFFF',
-      lineHeight: 32,
-    },
   });
 
   if (status === 'loading' && tables.length === 0) {
@@ -165,7 +160,7 @@ export const TableMapScreen: React.FC = () => {
   if (error && tables.length === 0) {
     return (
       <EmptyState
-        icon="❌"
+        icon="close_small"
         title="Erro ao carregar"
         message={
           error || 'Não foi possível carregar as mesas. Tente novamente.'
@@ -185,7 +180,7 @@ export const TableMapScreen: React.FC = () => {
           onFilterChange={handleFilterChange}
         />
         <EmptyState
-          icon="🗺️"
+          icon="mobile_alert"
           title="Nenhuma mesa encontrada"
           message="Tente ajustar os filtros ou sua busca."
         />
@@ -236,7 +231,7 @@ export const TableMapScreen: React.FC = () => {
         onPress={handleOpenNewOrder}
         activeOpacity={0.85}
       >
-        <Text style={styles.fabIcon}>+</Text>
+        <Icon name="add" size={28} color="#FFFFFF" />
       </TouchableOpacity>
 
       <NewOrderModal isVisible={isModalOpen} />

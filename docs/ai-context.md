@@ -260,3 +260,59 @@ Implementar a tela inicial `HomeScreen` conforme o protótipo Figma:
   - "Configurações" — placeholder "Em desenvolvimento".
 - Registrar `HomeScreen` como rota inicial no `RootNavigator`.
 - `TableMapScreen` passa a ser rota secundária (navegação por botão do home).
+
+---
+
+## **Branch: `feat/screens`** ✅ Em Progresso
+
+**Objetivo:** Finalização visual, ajustes refinados e implementação de telas core.
+
+### ✅ Completado
+
+#### **P1 — Poppins Typography**
+- Configurado `react-native.config.js` para autolinking de fontes
+- Adicionadas 4 variantes: Regular, Medium, SemiBold, Bold
+- Todos os `textStyles` agora usam `fontFamily` Poppins
+
+#### **P2 — SVG Icons**
+- Instalado `react-native-svg` + `react-native-svg-transformer`
+- Configurado `metro.config.js` para transformar SVG
+- Criado sistema de ícones tipado (`Icon` component)
+- 14 ícones Material Symbols incluídos
+- 7 componentes refatorados para usar ícones
+
+#### **Otimizações (Requisito: 1GB RAM + 8GB Storage)**
+- Multi-arquitetura: `arm64-v8a` + `armeabi-v7a`
+- ProGuard/R8 habilitado (reduz bytecode ~30%)
+- Hermes Engine ativado (reduz RAM ~20%)
+- **APK Release: 35MB** (40% menor que debug)
+
+#### **P4 — HomeScreen**
+- Criada `HomeScreen` como rota inicial
+- Header com logo Pigz Comanda
+- User info: Ghabrichelson + Zigpi Restaurante
+- Grid de ações com 3 cards:
+  - Novo Pedido → abre `NewOrderModal`
+  - Mapa de atendimento → navega para `TableMapScreen`
+  - Configurações → placeholder
+- Criado `ActionCard` component reutilizável
+- Criado `Text` component com variant mapping
+- `TableMapScreen` agora é rota secundária
+- **Fix:** Corrigido fechamento do `NewOrderModal` (onClose callback)
+
+### 🔄 Pendente
+
+#### **P3 — TableMapScreen: Scroll Infinito e Refs**
+- Implementar scroll infinito com carregamento sob demanda
+- Adicionar refs React para navegação programática
+- Otimizar renderização de lista grande
+- Implementar virtualização se necessário
+
+---
+
+## **Próximos Passos**
+
+1. **Implementar P3** (TableMapScreen: scroll infinito e refs)
+2. Testes E2E de navegação Home → TableMap
+3. Validação de performance em dispositivos 1GB RAM
+4. Preparação para merge em `develop`

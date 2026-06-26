@@ -8,7 +8,13 @@ import {
 } from 'react-native';
 import { useTheme } from '../../theme/useTheme';
 
-export type FilterType = 'all' | 'active' | 'waiting' | 'occupied' | 'idle' | 'available';
+export type FilterType =
+  | 'all'
+  | 'active'
+  | 'waiting'
+  | 'occupied'
+  | 'idle'
+  | 'available';
 
 interface FilterTabsProps {
   activeFilter: FilterType;
@@ -28,7 +34,7 @@ export const FilterTabs: React.FC<FilterTabsProps> = ({
   activeFilter,
   onFilterChange,
 }) => {
-  const { colors, spacing } = useTheme();
+  const { colors, spacing, textStyles } = useTheme();
   const scrollViewRef = useRef<ScrollView>(null);
 
   const styles = StyleSheet.create({
@@ -52,13 +58,12 @@ export const FilterTabs: React.FC<FilterTabsProps> = ({
       backgroundColor: colors.text.primary,
     },
     tabText: {
-      fontSize: 14,
+      ...textStyles.labelMd,
       color: colors.text.primary,
-      fontWeight: '500',
     },
     tabTextActive: {
+      ...textStyles.labelMd,
       color: colors.background.primary,
-      fontWeight: '600',
     },
   });
 

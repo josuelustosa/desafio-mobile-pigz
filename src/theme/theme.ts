@@ -57,6 +57,7 @@ export type Theme = {
     lineHeight: typeof lineHeight;
     styles: typeof textStyles;
   };
+  textStyles: typeof textStyles; // Alias para typography.styles (conveniência)
   layout: {
     screen: typeof screen;
     breakpoints: typeof breakpoints;
@@ -85,6 +86,7 @@ const baseTheme = {
     lineHeight,
     styles: textStyles,
   },
+  textStyles, // Alias para typography.styles (conveniência)
   layout: {
     screen,
     breakpoints,

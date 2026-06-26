@@ -1,9 +1,10 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useTheme } from '../../theme/useTheme';
+import { Icon, type IconName } from '../Icon';
 
 interface EmptyStateProps {
-  icon?: string;
+  icon?: IconName;
   title: string;
   message: string;
   actionLabel?: string;
@@ -11,13 +12,13 @@ interface EmptyStateProps {
 }
 
 export const EmptyState: React.FC<EmptyStateProps> = ({
-  icon = '📭',
+  icon,
   title,
   message,
   actionLabel,
   onAction,
 }) => {
-  const { colors, spacing } = useTheme();
+  const { colors, spacing, textStyles } = useTheme();
 
   const styles = StyleSheet.create({
     container: {
@@ -28,22 +29,19 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       paddingVertical: spacing.xl,
       backgroundColor: colors.background.primary,
     },
-    icon: {
-      fontSize: 64,
+    iconContainer: {
       marginBottom: spacing.lg,
     },
     title: {
-      fontSize: 18,
-      fontWeight: '600',
+      ...textStyles.headingMd,
       color: colors.text.primary,
       marginBottom: spacing.sm,
       textAlign: 'center',
     },
     message: {
-      fontSize: 14,
+      ...textStyles.bodyMd,
       color: colors.text.secondary,
       textAlign: 'center',
-      lineHeight: 20,
     },
     actionButton: {
       marginTop: spacing.lg,
@@ -53,15 +51,18 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       backgroundColor: colors.text.primary,
     },
     actionLabel: {
-      fontSize: 14,
-      fontWeight: '600',
+      ...textStyles.labelMd,
       color: colors.background.primary,
     },
   });
 
   return (
     <View style={styles.container}>
-      <Text style={styles.icon}>{icon}</Text>
+      {icon && (
+        <View style={styles.iconContainer}>
+          <Icon name={icon} size={64} color={colors.text.tertiary} />
+        </View>
+      )}
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.message}>{message}</Text>
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 import { useTheme } from '../../theme/useTheme';
+import { Icon } from '../Icon';
 
 interface SearchBarProps {
   query: string;
@@ -13,7 +14,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   onQueryChange,
   placeholder = 'Cliente, mesa, comanda, atendente',
 }) => {
-  const { colors, spacing } = useTheme();
+  const { colors, spacing, textStyles } = useTheme();
 
   const styles = StyleSheet.create({
     container: {
@@ -24,27 +25,26 @@ export const SearchBar: React.FC<SearchBarProps> = ({
       backgroundColor: colors.background.primary,
     },
     iconContainer: {
-      marginRight: spacing.sm,
+      position: 'absolute',
+      left: spacing.lg,
+      zIndex: 1,
     },
     input: {
       flex: 1,
       paddingVertical: spacing.sm,
-      paddingHorizontal: spacing.md,
+      paddingLeft: spacing.xl + spacing.md,
+      paddingRight: spacing.md,
       backgroundColor: colors.surface.raised,
       borderRadius: 8,
       color: colors.text.primary,
-      fontSize: 16,
+      ...textStyles.bodyMd,
     },
   });
 
   return (
     <View style={styles.container}>
       <View style={styles.iconContainer}>
-        <TextInput
-          placeholder="🔍"
-          editable={false}
-          style={{ fontSize: 20 }}
-        />
+        <Icon name="search" size={20} color={colors.text.tertiary} />
       </View>
       <TextInput
         style={styles.input}
